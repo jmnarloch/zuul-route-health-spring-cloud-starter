@@ -24,7 +24,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * Configures the {@link ZuulRouteHealthIndicator}.
+ *
  * @author Jakub Narloch
+ * @see ZuulRouteHealthIndicator
  */
 @Configuration
 @ConditionalOnClass({DiscoveryClient.class, ZuulProperties.class})
@@ -33,7 +36,7 @@ public class ZuulRouteHealthIndicatorAutoConfiguration {
 
     @Bean
     @ConditionalOnBean({DiscoveryClient.class, ZuulProperties.class})
-    public ZuulRouteHealthIndicator zuulRouteHealthCheck(DiscoveryClient discoveryClient, ZuulProperties zuulProperties) {
+    public ZuulRouteHealthIndicator zuulRoutesHealthIndicator(DiscoveryClient discoveryClient, ZuulProperties zuulProperties) {
         return new ZuulRouteHealthIndicator(discoveryClient, zuulProperties);
     }
 }

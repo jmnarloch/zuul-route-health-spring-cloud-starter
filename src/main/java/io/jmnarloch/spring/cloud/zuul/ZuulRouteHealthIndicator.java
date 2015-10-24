@@ -26,6 +26,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Zuul routes health indicator. Indicates whether for each configured Zuul routes the discovery service contains the
+ * entry for specific service. Aggregates the state of all routes.
+ *
  * @author Jakub Narloch
  */
 public class ZuulRouteHealthIndicator implements HealthIndicator {
@@ -107,8 +110,12 @@ public class ZuulRouteHealthIndicator implements HealthIndicator {
             }
         }
 
-        builder.withDetail(AVAILABLE, available);
-        builder.withDetail(UNAVAILABLE, unavailable);
+        if(!available.isEmpty()) {
+            builder.withDetail(AVAILABLE, available);
+        }
+        if(!unavailable.isEmpty()) {
+            builder.withDetail(UNAVAILABLE, unavailable);
+        }
         return builder;
     }
 }
