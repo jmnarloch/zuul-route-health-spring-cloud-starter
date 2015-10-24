@@ -83,7 +83,7 @@ public class ZuulRouteHealthIndicatorTest {
         // then
         assertNotNull(health);
         assertEquals(Status.DOWN, health.getStatus());
-        assertTrue(((Collection) health.getDetails().get("available")).isEmpty());
+        assertNull(health.getDetails().get("available"));
         assertFalse(((Collection) health.getDetails().get("unavailable")).isEmpty());
     }
 
@@ -105,7 +105,7 @@ public class ZuulRouteHealthIndicatorTest {
         assertNotNull(health);
         assertEquals(Status.UP, health.getStatus());
         assertFalse(((Collection) health.getDetails().get("available")).isEmpty());
-        assertTrue(((Collection) health.getDetails().get("unavailable")).isEmpty());
+        assertNull(health.getDetails().get("unavailable"));
     }
 
     @EnableAutoConfiguration
