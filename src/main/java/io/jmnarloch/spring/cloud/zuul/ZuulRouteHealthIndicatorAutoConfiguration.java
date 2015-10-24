@@ -16,6 +16,7 @@
 package io.jmnarloch.spring.cloud.zuul;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
@@ -26,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Jakub Narloch
  */
 @Configuration
-//@ConditionalOnClass()
+@ConditionalOnClass({DiscoveryClient.class, ZuulProperties.class})
 @ConditionalOnProperty(value = "zuul.health.enabled", matchIfMissing = true)
 public class ZuulRouteHealthIndicatorAutoConfiguration {
 

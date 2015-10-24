@@ -30,13 +30,31 @@ import java.util.Set;
  */
 public class ZuulRouteHealthIndicator implements HealthIndicator {
 
+    /**
+     * The available routes.
+     */
     private static final String AVAILABLE = "available";
+
+    /**
+     * The unavailable routes.
+     */
     private static final String UNAVAILABLE = "unavailable";
 
+    /**
+     * The local discovery client.
+     */
     private final DiscoveryClient discoveryClient;
 
+    /**
+     * The Zuul routing configuration.
+     */
     private final ZuulProperties zuulProperties;
 
+    /**
+     * Creates new instance of {@link ZuulRouteHealthIndicator} instance with the discovery client and Zuul properties.
+     * @param discoveryClient the discover client
+     * @param zuulProperties the zuul properties
+     */
     public ZuulRouteHealthIndicator(DiscoveryClient discoveryClient, ZuulProperties zuulProperties) {
         Assert.notNull(discoveryClient, "Parameter 'discoveryClient' can not be null");
         Assert.notNull(zuulProperties, "Parameter 'zuulPropertes' can not be null");
@@ -44,6 +62,9 @@ public class ZuulRouteHealthIndicator implements HealthIndicator {
         this.zuulProperties = zuulProperties;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Health health() {
 
@@ -52,6 +73,10 @@ public class ZuulRouteHealthIndicator implements HealthIndicator {
         return withAdditionalDetails(builder).build();
     }
 
+    /**
+     * Retrieves the Zuul routes health status.
+     * @return the routes status
+     */
     private Status getRouteStatus() {
         for (ZuulProperties.ZuulRoute route : zuulProperties.getRoutes().values()) {
             if (route.getServiceId() != null && discoveryClient.getInstances(route.getServiceId()).isEmpty()) {
@@ -61,6 +86,12 @@ public class ZuulRouteHealthIndicator implements HealthIndicator {
         return Status.UP;
     }
 
+    /**
+     * Populates the health information with the list of available routes.
+     *
+     * @param builder the health builder
+     * @return the health builder
+     */
     private Health.Builder withAdditionalDetails(Health.Builder builder) {
 
         final Set<String> available = new HashSet<>();

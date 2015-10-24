@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-io.jmnarloch.spring.cloud.feign.OkHttpClientAutoConfiguration
+io.jmnarloch.spring.cloud.zuul.ZuulRouteHealthIndicatorAutoConfiguration

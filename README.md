@@ -14,6 +14,14 @@ a backing service exists in the discovery service.
 
 Add the Spring Cloud starter to your project:
 
+```xml
+<dependency>
+  <groupId>io.jmnarloch</groupId>
+  <artifactId>zuul-route-health-spring-cloud-starter</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
 ## Properties
 
 Property `zuul.health.enabled` let's you enable this extension.
