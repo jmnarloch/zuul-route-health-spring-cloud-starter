@@ -1,0 +1,15 @@
+ext {
+
+    libraries = [
+
+            springBootConfigurationProcessor: 'org.springframework.boot:spring-boot-configuration-processor:1.2.5.RELEASE',
+
+            springBootActuator              : 'org.springframework.boot:spring-boot-starter-actuator:1.2.5.RELEASE',
+            springCloudZuul                 : 'org.springframework.cloud:spring-cloud-starter-zuul:1.0.3.RELEASE',
+
+            springBootTest                  : 'org.springframework.boot:spring-boot-starter-test:1.2.5.RELEASE',
+
+            junit                           : 'junit:junit:4.12',
+            mockito                         : 'org.mockito:mockito-all:1.10.19'
+    ]
+}
