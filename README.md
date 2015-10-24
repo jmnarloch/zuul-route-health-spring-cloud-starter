@@ -30,6 +30,13 @@ Property `zuul.health.enabled` let's you enable this extension.
 zuul.health.enabled=true # true by default
 ```
 
+## Health endpoint
+
+The health indicator is auto registered and will be triggered whenever the Actuator's health endpoint will be accessed:
+
+![Zuul routes](https://github.com/jmnarloch/zuul-route-health-spring-cloud-starter/raw/master/screen.png "Zuul routes")
+
+
 ## License
 
 Apache 2.0
