@@ -55,8 +55,11 @@ public class ZuulRouteHealthIndicator implements HealthIndicator {
 
     /**
      * Creates new instance of {@link ZuulRouteHealthIndicator} instance with the discovery client and Zuul properties.
+     *
      * @param discoveryClient the discover client
-     * @param zuulProperties the zuul properties
+     * @param zuulProperties  the zuul properties
+     * @throws IllegalArgumentException if {@code discoveryClient} is {@code null}
+     *                                  or {@code zuulProperties} is {@code null}
      */
     public ZuulRouteHealthIndicator(DiscoveryClient discoveryClient, ZuulProperties zuulProperties) {
         Assert.notNull(discoveryClient, "Parameter 'discoveryClient' can not be null");
