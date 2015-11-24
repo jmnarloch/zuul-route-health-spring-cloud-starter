@@ -74,51 +74,85 @@ public class ZuulRouteHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
 
-        final Health.Builder builder = Health.unknown();
-        builder.status(getRouteStatus());
-        return withAdditionalDetails(builder).build();
+        final ZuulRouteHealth health = new ZuulRouteHealth();
+        return build(health);
     }
 
     /**
-     * Retrieves the Zuul routes health status.
-     * @return the routes status
-     */
-    private Status getRouteStatus() {
-        for (ZuulProperties.ZuulRoute route : zuulProperties.getRoutes().values()) {
-            if (route.getServiceId() != null && discoveryClient.getInstances(route.getServiceId()).isEmpty()) {
-                return Status.DOWN;
-            }
-        }
-        return Status.UP;
-    }
-
-    /**
-     * Populates the health information with the list of available routes.
+     * Builds the Zuul routes health and maps it into aggregated health status.
      *
-     * @param builder the health builder
-     * @return the health builder
+     * @param health the routes
+     * @return the health information
      */
-    private Health.Builder withAdditionalDetails(Health.Builder builder) {
+    private Health build(ZuulRouteHealth health) {
 
-        final Set<String> available = new HashSet<>();
-        final Set<String> unavailable = new HashSet<>();
+        final Health.Builder builder = Health.status(health.getStatus());
+        if (!health.getAvailable().isEmpty()) {
+            builder.withDetail(AVAILABLE, health.getAvailable());
+        }
+        if (!health.getUnavailable().isEmpty()) {
+            builder.withDetail(UNAVAILABLE, health.getUnavailable());
+        }
+        return builder.build();
+    }
 
-        for (ZuulProperties.ZuulRoute route : zuulProperties.getRoutes().values()) {
-            if(route.getServiceId() != null) {
-                if(!discoveryClient.getInstances(route.getServiceId()).isEmpty()) {
-                    available.add(route.getServiceId());
-                } else {
-                    unavailable.add(route.getServiceId());
+    /**
+     * Aggregates the routes health infomration.
+     *
+     * @author Jakub Narloch
+     */
+    private class ZuulRouteHealth {
+
+        /**
+         * The set of available routes.
+         */
+        private final Set<String> available = new HashSet<>();
+
+        /**
+         * The set of unavailable routes.
+         */
+        private final Set<String> unavailable = new HashSet<>();
+
+        /**
+         * Creates new instance of {@link ZuulRouteHealth}.
+         */
+        public ZuulRouteHealth() {
+            for (ZuulProperties.ZuulRoute route : zuulProperties.getRoutes().values()) {
+                if (route.getServiceId() != null) {
+                    if (!discoveryClient.getInstances(route.getServiceId()).isEmpty()) {
+                        available.add(route.getServiceId());
+                    } else {
+                        unavailable.add(route.getServiceId());
+                    }
                 }
             }
         }
 
-        if(!available.isEmpty()) {
-            builder.withDetail(AVAILABLE, available);
+        /**
+         * Retrieves the set of available routes.
+         *
+         * @return the available routes
+         */
+        public Set<String> getAvailable() {
+            return available;
         }
-        if(!unavailable.isEmpty()) {
-            builder.withDetail(UNAVAILABLE, unavailable);
+
+        /**
+         * Retrieves the set of unavailable routes.
+         *
+         * @return the unavailable routes
+         */
+        public Set<String> getUnavailable() {
+            return unavailable;
         }
-        return builder;
+
+        /**
+         * Retrieves the health status.
+         *
+         * @return the health status
+         */
+        public Status getStatus() {
+            return unavailable.isEmpty() ? Status.UP : Status.DOWN;
+        }
     }
 }
